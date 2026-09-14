@@ -15,6 +15,7 @@
         <h2>Create a New Post</h2>
 
         <form action="/posts" method="POST">
+
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" required>
 
@@ -33,6 +34,28 @@
 
             <button type="submit">Create Post</button>
         </form>
+
+
+        <h2>Blog posts<h2>
+        <% posts.forEach(post => { %>
+
+            <article>
+                <h3><%= post.title %></h3>
+
+                <p>by <%= post.name %></p>
+                <p>Posted on <%= post.date %></p>
+                <p><%= post.content %></p>
+
+                <!--Allows the post to be edited identified by its id-->
+                <a href="/posts/<%= post.id %>/edit">Edit</a>
+
+                <!--Allows the action of deletion through the ID-->
+                <form action="/posts/<%= post.id %>/delete" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </article>
+        
+        <% }) %>
 
     </body>
 </html>
