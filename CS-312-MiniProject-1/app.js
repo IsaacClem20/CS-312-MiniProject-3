@@ -62,6 +62,7 @@ app.post("/posts/:id/edit", (req, res) => {
 app.post("/posts/:id/delete", (req, res) => {
     const postId = Number(req.params.id);
 
+    // IMPORTANT: filters array to display only the posts that are left
     posts = posts.filter(post => post.id !== postId);
 
     res.redirect("/");
