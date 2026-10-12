@@ -13,46 +13,50 @@
         <p>Welcome to my blog!</p>
         <p>Please be respectful of others.</p>
         <p>Number of posts: <%= posts.length %></p>
+        <% if (user) { %>
+            <p>Signed in as <%= user.name %></p>
+            <p><a href="/logout">Log Out</a></p>
+        <% } else { %>
+            <p><a href="/signin">Sign In</a> | <a href="/signup">Sign Up</a></p>
+        <% } %>
 
-        <h2>Create a New Post</h2>
+       <% if (user) { %>
+    <h2>Create a New Post</h2>
 
-        <form action="/posts" method="POST">
+    <form action="/posts" method="POST">
+        <label for="title">Blog Title:</label>
+        <input type="text" id="title" name="title" required>
 
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required>
+        <br><br>
 
-            <br><br>
-
-            <label for="title">Blog Title:</label>
-            <input type="text" id="title" name="title" required>
-
-            <br><br>
-
-            <label for="content">Blog Content:</label>
-            <br>
-            <textarea id="content" name="content" rows="8" cols="50" required></textarea>
+        <label for="content">Blog Content:</label>
+        <br>
+        <textarea id="content" name="content" rows="8" cols="50" required></textarea>
 
             <br><br>
 
             <button type="submit">Create Post</button>
         </form>
+    <% } else { %>
+        <p>Sign in to create a blog post.</p>
+    <% } %>
 
 
-        <h2>Blog posts<h2>
+        <h2>Blog posts</h2>
         <% posts.forEach(post => { %>
 
             <article>
                 <h3><%= post.title %></h3>
 
-                <p>by <%= post.name %></p>
-                <p>Posted on <%= post.date %></p>
-                <p><%= post.content %></p>
+                <p>by <%= post.creator_name %></p>
+                <p>Posted on <%= post.date_created %></p>
+                <p><%= post.body %></p>
 
                 <!--Allows the post to be edited identified by its id-->
-                <a href="/posts/<%= post.id %>/edit">Edit</a>
+                <a href="/posts/<%= post.blog_id %>/edit">Edit</a>
 
                 <!--Allows the action of deletion through the ID-->
-                <form action="/posts/<%= post.id %>/delete" method="POST">
+                <form action="/posts/<%= post.blog_id %>/delete" method="POST">
                     <button type="submit">Delete</button>
                 </form>
             </article>

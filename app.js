@@ -6,8 +6,6 @@ const pool = require("./db");
 const app = express();
 const PORT = 3000;
 require("dotenv").config();
-// temp array storage for posts
-let posts = [];
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true}));
@@ -110,8 +108,20 @@ app.post("/signin", async (req, res) => {
 });
 
 // Add the first route to server (homepage)
-app.get("/", (req,res) => {
-    res.render("index", { posts: posts });
+app.get("/", async (req, res) => {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM blogs ORDER BY date_created DESC"
+        );
+
+        res.render("index", {
+            posts: result.rows,
+            user: req.session.user
+        });
+    } catch (error) {
+        console.error("Error loading blog posts:", error.message);
+        res.status(500).send("Could not load blog posts.");
+    }
 });
 
 // create post button setup route
