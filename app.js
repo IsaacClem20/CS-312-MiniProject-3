@@ -1,13 +1,21 @@
 // Express setup
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const PORT = 3000;
+require("dotenv").config();
 // temp array storage for posts
 let posts = [];
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static("public"));
+// uses session cookies in .env file
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
 
 // Add the first route to server (homepage)
 app.get("/", (req,res) => {
