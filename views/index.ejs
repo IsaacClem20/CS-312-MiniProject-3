@@ -51,7 +51,13 @@
                 <h3><%= post.title %></h3>
 
                 <p>by <%= post.creator_name %></p>
-                <p>Posted on <%= post.date_created %></p>
+                <p>Posted on <%= new Date(post.date_created).toLocaleString("en-US", {
+                     year: "numeric",
+                     month: "long",
+                     day: "numeric",
+                     hour: "numeric",
+                      minute: "2-digit"
+                    }) %></p>
                 <p><%= post.body %></p>
 
                <!--Allows the post to be edited identified by its id-->
