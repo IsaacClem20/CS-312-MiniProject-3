@@ -21,16 +21,47 @@ app.get("/signup", (req, res) => {
     res.render("signup");
 });
 
-// Create a new user account
+
+ // Create a new user account
 app.post("/signup", async (req, res) => {
+
+    // Make sure all fields were submitted as text
+    if (
+        typeof req.body.user_id !== "string" ||
+        typeof req.body.name !== "string" ||
+        typeof req.body.password !== "string"
+    ) {
+        return res.status(400).send("Please provide all required fields.");
+    }
+
     const user_id = req.body.user_id.trim();
     const name = req.body.name.trim();
     const password = req.body.password;
 
+    // Validate the user ID
+    if (user_id.length < 3 || user_id.length > 50) {
+        return res.status(400).send(
+            'User ID must be between 3 and 50 characters. <a href="/signup">Try again</a>.'
+        );
+    }
+
+    // Validate the name
+    if (name.length === 0 || name.length > 100) {
+        return res.status(400).send(
+            'Name must be between 1 and 100 characters. <a href="/signup">Try again</a>.'
+        );
+    }
+
+    // Validate the password
+    if (password.length < 8 || password.length > 72) {
+        return res.status(400).send(
+            'Password must be between 8 and 72 characters. <a href="/signup">Try again</a>.'
+        );
+    }
+
     try {
         // Check if the user ID already exists
         const existingUser = await pool.query(
-            // using $1 as a query parameter to prevent SQL injection
             "SELECT user_id FROM users WHERE user_id = $1",
             [user_id]
         );
@@ -56,6 +87,7 @@ app.post("/signup", async (req, res) => {
         res.status(500).send("Something went wrong while creating your account.");
     }
 });
+
 
 // Show the signin page
 app.get("/signin", (req, res) => {
