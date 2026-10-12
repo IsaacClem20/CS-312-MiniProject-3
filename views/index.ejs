@@ -54,13 +54,16 @@
                 <p>Posted on <%= post.date_created %></p>
                 <p><%= post.body %></p>
 
-                <!--Allows the post to be edited identified by its id-->
-                <a href="/posts/<%= post.blog_id %>/edit">Edit</a>
+               <!--Allows the post to be edited identified by its id-->
+            <% if (user && user.user_id === post.creator_user_id) { %>
+             <a href="/posts/<%= post.blog_id %>/edit">Edit</a>
+            
+             <!--Allows the action of deletion through the ID-->
+            <form action="/posts/<%= post.blog_id %>/delete" method="POST">
+             <button type="submit">Delete</button>
+            </form>
+            <% } %>
 
-                <!--Allows the action of deletion through the ID-->
-                <form action="/posts/<%= post.blog_id %>/delete" method="POST">
-                    <button type="submit">Delete</button>
-                </form>
             </article>
         
         <% }) %>
