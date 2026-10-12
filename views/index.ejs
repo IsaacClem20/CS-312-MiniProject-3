@@ -15,7 +15,9 @@
         <p>Number of posts: <%= posts.length %></p>
         <% if (user) { %>
             <p>Signed in as <%= user.name %></p>
-            <p><a href="/logout">Log Out</a></p>
+            <form action="/logout" method="POST">
+                <button type="submit">Log Out</button>
+            </form>
         <% } else { %>
             <p><a href="/signin">Sign In</a> | <a href="/signup">Sign Up</a></p>
         <% } %>

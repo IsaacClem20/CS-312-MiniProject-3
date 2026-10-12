@@ -107,6 +107,20 @@ app.post("/signin", async (req, res) => {
     }
 });
 
+// logout a signed in user
+app.post("/logout", (req, res) => {
+    req.session.destroy((error) => {
+        if (error) {
+            console.error("Logout error:", error.message);
+            return res.status(500).send("Could not log out.");
+        }
+
+        res.clearCookie("connect.sid");
+        res.redirect("/signin");
+    });
+});
+
+
 // Add the first route to server (homepage)
 app.get("/", async (req, res) => {
     try {
