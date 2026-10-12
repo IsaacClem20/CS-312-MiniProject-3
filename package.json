@@ -19,9 +19,11 @@
   },
   "homepage": "https://github.com/IsaacClem20/CS-312-MiniProject-1#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^18.0.7",
     "ejs": "^6.0.1",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "pg": "^8.23.1"
   }
 }
