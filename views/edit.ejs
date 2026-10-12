@@ -1,7 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!--Standard setup and references-->
         <link rel="stylesheet" href="/styles.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,28 +9,15 @@
     </head>
 
     <body>
-
         <h1>Edit Post</h1>
 
-        <form action="/posts/<%= post.id %>/edit" method="POST">
-
-            <label for="name">Your Name:</label>
-            <input 
-                type="text" 
-                id="name" 
-                name="name" 
-                value="<%= post.name %>" 
-                required
-            >
-
-            <br><br>
-
+        <form action="/posts/<%= post.blog_id %>/edit" method="POST">
             <label for="title">Blog Title:</label>
-            <input 
-                type="text" 
-                id="title" 
-                name="title" 
-                value="<%= post.title %>" 
+            <input
+                type="text"
+                id="title"
+                name="title"
+                value="<%= post.title %>"
                 required
             >
 
@@ -38,23 +25,20 @@
 
             <label for="content">Blog Content:</label>
             <br>
-            <textarea 
-                id="content" 
-                name="content" 
-                rows="8" 
-                cols="50" 
+            <textarea
+                id="content"
+                name="content"
+                rows="8"
+                cols="50"
                 required
-            ><%= post.content %></textarea>
+            ><%= post.body %></textarea>
 
             <br><br>
 
             <button type="submit">Save Changes</button>
-
         </form>
 
         <br>
-
         <a href="/">Cancel</a>
-
     </body>
 </html>

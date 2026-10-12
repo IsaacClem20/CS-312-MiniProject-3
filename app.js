@@ -124,58 +124,121 @@ app.get("/", async (req, res) => {
     }
 });
 
-// create post button setup route
-app.post("/posts", (req, res) => {
-    const newPost = {
-        id: Date.now(),
-        name: req.body.name,
-        title: req.body.title,
-        content: req.body.content,
-        date: new Date()
-    };
-    
-    posts.push(newPost);
-    res.redirect("/");
+// creating a post from a user
+app.post("/posts", async (req, res) => {
+    // Make sure the user is signed in
+    if (!req.session.user) {
+        // if theyre not, send them back to signin page
+        return res.redirect("/signin");
+    }
+
+    const title = req.body.title.trim();
+    const body = req.body.content.trim();
+
+    try {
+        // Save the new post to PostgreSQL
+        await pool.query(
+            `INSERT INTO blogs
+                (creator_name, creator_user_id, title, body)
+             VALUES ($1, $2, $3, $4)`,
+            [
+                req.session.user.name,
+                req.session.user.user_id,
+                title,
+                body
+            ]
+        );
+
+        res.redirect("/");
+    } catch (error) {
+        console.error("Error creating post:", error.message);
+        res.status(500).send("Could not create your blog post.");
+    }
 });
 
 // Show the edit setting for a blog post
-app.get("/posts/:id/edit", (req, res) =>{
-    const postId = Number(req.params.id);
-
-    const post = posts.find(post => post.id === postId);
-
-    if (!post) {
-        return res.status(404).send("Post not found");
+app.get("/posts/:id/edit", async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect("/signin");
     }
 
-    res.render("edit", {post: post});
+    const postId = req.params.id;
+
+    try {
+        const result = await pool.query(
+            "SELECT * FROM blogs WHERE blog_id = $1 AND creator_user_id = $2",
+            [postId, req.session.user.user_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).send("Post not found or you do not have permission to edit it.");
+        }
+
+        res.render("edit", { post: result.rows[0] });
+    } catch (error) {
+        console.error("Error loading post for editing:", error.message);
+        res.status(500).send("Could not load the post.");
+    }
 });
 
 // Save changes to a newly edited blog post
-app.post("/posts/:id/edit", (req, res) => {
-    const postId = Number(req.params.id);
-
-    const post = posts.find(post => post.id === postId);
-
-    if (!post) {
-        return res.status(404).send("Post not found");
+app.post("/posts/:id/edit", async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect("/signin");
     }
 
-    post.name = req.body.name;
-    post.title = req.body.title;
-    post.content = req.body.content;
+    const postId = req.params.id;
+    const title = req.body.title.trim();
+    const body = req.body.content.trim();
 
-    res.redirect("/");
+    try {
+        const result = await pool.query(
+            `UPDATE blogs
+             SET title = $1, body = $2
+             WHERE blog_id = $3 AND creator_user_id = $4`,
+            [
+                title,
+                body,
+                postId,
+                req.session.user.user_id
+            ]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).send("Post not found or you do not have permission to edit it.");
+        }
+
+        res.redirect("/");
+    } catch (error) {
+        console.error("Error updating post:", error.message);
+        res.status(500).send("Could not update the post.");
+    }
 });
 
 // Delete a blog post
-app.post("/posts/:id/delete", (req, res) => {
-    const postId = Number(req.params.id);
 
-    // IMPORTANT: filters array to display only the posts that are left
-    posts = posts.filter(post => post.id !== postId);
+app.post("/posts/:id/delete", async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect("/signin");
+    }
 
-    res.redirect("/");
+    const postId = req.params.id;
+
+    try {
+        const result = await pool.query(
+            "DELETE FROM blogs WHERE blog_id = $1 AND creator_user_id = $2",
+            [postId, req.session.user.user_id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).send("Post not found or you do not have permission to delete it.");
+        }
+
+        res.redirect("/");
+    } catch (error) {
+        console.error("Error deleting post:", error.message);
+        res.status(500).send("Could not delete the post.");
+    }
 });
 
 // Start server
