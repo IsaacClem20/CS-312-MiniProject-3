@@ -26,7 +26,8 @@ function HomePage({
     posts,
     postsLoading,
     postsError,
-    onPostCreated
+    onPostCreated,
+    onPostDeleted
 }) {
 
     return (
@@ -86,7 +87,11 @@ function HomePage({
 
             ) : (
 
-                <PostList posts={posts} user={user} />
+                <PostList
+                  posts={posts}
+                  user={user}
+                  onPostDeleted={onPostDeleted}
+                />
 
             )}
 
@@ -266,6 +271,7 @@ function App() {
                                 postsLoading={postsLoading}
                                 postsError={postsError}
                                 onPostCreated={handlePostCreated}
+                                onPostDeleted={handlePostDeleted}
                             />
                         }
                     />

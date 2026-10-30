@@ -218,6 +218,7 @@
 }
 
 
+
 /* Edit and delete button layout */
 
 .post-actions {
@@ -231,6 +232,23 @@
     cursor: pointer;
     border: none;
     border-radius: 4px;
+    color: white;
+}
+
+.post-actions .edit-button {
+    background-color: #8b1e3f;
+}
+
+.post-actions .edit-button:hover {
+    background-color: #6e1732;
+}
+
+.post-actions .delete-button {
+    background-color: #c0392b;
+}
+
+.post-actions .delete-button:hover {
+    background-color: #922b21;
 }
 
 .post-actions button:disabled {

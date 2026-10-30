@@ -167,7 +167,7 @@ function EditPost({ onPostUpdated }) {
                 <h1>Unable to Edit Post</h1>
 
                 <p className="form-error" role="alert">
-                    {LoadError}
+                    {loadError}
                 </p>
 
                 <Link to="/">Return to Homepage</Link>
