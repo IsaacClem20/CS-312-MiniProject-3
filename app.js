@@ -3,6 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const pool = require("./db");
+const apiRouter = require("./routes/api");
 const app = express();
 const PORT = 3000;
 require("dotenv").config();
@@ -27,6 +28,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+// Connect the React frontend API routes
+app.use("/api", apiRouter);
+
 // Show the signup page
 app.get("/signup", (req, res) => {
     res.render("signup");

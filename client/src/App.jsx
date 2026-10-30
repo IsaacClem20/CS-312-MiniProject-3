@@ -1,36 +1,132 @@
 
-import { useEffect, useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+    Link,
+    Navigate
+} from 'react-router-dom';
+
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+
 import './App.css';
 
+// Temporary homepage until we implement
+// the actual blog post components in Step 6.
+function HomePage({ user }) {
+    return (
+        <div className="app-shell">
+
+            <h1>Isaac's Crazy Blog</h1>
+
+            <p>Welcome to my blog!</p>
+            <p>Please be respectful of others.</p>
+
+            {user ? (
+                <div>
+                    <p>Signed in as {user.name}</p>
+                    <p>Your account is successfully authenticated!</p>
+                </div>
+            ) : (
+                <div className="home-links">
+                    <Link to="/signin">Sign In</Link>
+                    {' | '}
+                    <Link to="/signup">Sign Up</Link>
+                </div>
+            )}
+
+            <h2>Blog posts</h2>
+            <p>Our React blog homepage will be implemented in Step 6.</p>
+
+        </div>
+    );
+}
+
+
 function App() {
-    const [apiMessage, setApiMessage] = useState("Connecting to backend...");
+    // Store the currently signed-in user
+    const [user, setUser] = useState(null);
+
+    // Check whether a session already exists
+    const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/health')
-            .then(response => {
+        let isMounted = true;
+
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    credentials: 'include'
+                });
+
                 if (!response.ok) {
-                    throw new Error(`HTTP error: ${response.status}`);
+                    throw new Error('Could not check login status.');
                 }
 
-                return response.json();
-            })
-            .then(data => {
-                console.log("Backend response:", data);
-                setApiMessage(data.message);
-            })
-            .catch(error => {
-                console.error("Backend connection failed:", error);
-                setApiMessage("Could not connect to the backend.");
-            });
+                const data = await response.json();
+
+                if (isMounted) {
+                    setUser(data.user);
+                }
+
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+
+                if (isMounted) {
+                    setUser(null);
+                }
+
+            } finally {
+                if (isMounted) {
+                    setAuthLoading(false);
+                }
+            }
+        }
+
+        checkAuth();
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     return (
-        <div className="app">
-            <h1>My Blog Application</h1>
-            <h2>React + Express Integration</h2>
+        <BrowserRouter>
 
-            <p>{apiMessage}</p>
-        </div>
+            {authLoading ? (
+                <p className="loading-message">
+                    Checking login status...
+                </p>
+            ) : (
+                <Routes>
+
+                    <Route
+                        path="/"
+                        element={<HomePage user={user} />}
+                    />
+
+                    <Route
+                        path="/signin"
+                        element={<SignIn onLogin={setUser} />}
+                    />
+
+                    <Route
+                        path="/signup"
+                        element={<SignUp />}
+                    />
+
+                    <Route
+                        path="*"
+                        element={<Navigate to="/" replace />}
+                    />
+
+                </Routes>
+            )}
+
+        </BrowserRouter>
     );
 }
 
