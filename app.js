@@ -8,8 +8,19 @@ const PORT = 3000;
 require("dotenv").config();
 
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
+
+// Test API endpoint for React connection
+app.get("/api/health", (req, res) => {
+    res.json({
+        status: "success",
+        message: "React is successfully connected to Express!"
+    });
+});
+
+
 // uses session cookies in .env file
 app.use(session({
     secret: process.env.SESSION_SECRET,
