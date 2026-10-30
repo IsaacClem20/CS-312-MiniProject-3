@@ -15,6 +15,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import BlogPostForm from './components/BlogPostForm';
 import PostList from './components/PostList';
+import EditPost from './components/EditPost';
 
 import './App.css';
 
@@ -218,6 +219,29 @@ function App() {
 
     }
 
+    // Replace an existing post with its updated version
+    function handlePostUpdated(updatedPost) {
+
+        setPosts(previousPosts =>
+          previousPosts.map(post =>
+            post.blog_id === updatedPost.blog_id
+                ? updatedPost
+                : post
+         )
+      );
+
+    }
+
+    // Remove a deleted post from the posts array
+    function handlePostDeleted(deletedPostId) {
+
+        setPosts(previousPosts =>
+            previousPosts.filter(
+            post => post.blog_id !== deletedPostId
+          )
+      );
+
+    }
 
     return (
 
@@ -256,6 +280,13 @@ function App() {
                     <Route
                         path="/signup"
                         element={<SignUp />}
+                    />
+
+                    <Route
+                        path="/edit/:id"
+                        element={
+                          <EditPost onPostUpdated={handlePostUpdated} />
+                        }
                     />
 
                     <Route
