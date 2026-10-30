@@ -27,7 +27,9 @@ function HomePage({
     postsLoading,
     postsError,
     onPostCreated,
-    onPostDeleted
+    onPostDeleted,
+    onLogout,
+    logoutError
 }) {
 
     return (
@@ -41,15 +43,29 @@ function HomePage({
 
 
             {/* Display login information */}
-            {user ? (
+          {user ? (
 
-                <div className="user-info">
+             <div className="user-info">
 
-                    <p>Signed in as {user.name}</p>
+              <p>Signed in as {user.name}</p>
 
-                </div>
+               <button
+                type="button"
+                className="logout-button"
+                onClick={onLogout}
+              >
+               Sign Out
+        </button>
 
-            ) : (
+        {logoutError && (
+            <p className="form-error" role="alert">
+                {logoutError}
+            </p>
+        )}
+
+    </div>
+
+) : (
 
                 <div className="home-links">
 
@@ -112,6 +128,7 @@ function App() {
     const [authLoading, setAuthLoading] = useState(true);
     const [postsLoading, setPostsLoading] = useState(true);
     const [postsError, setPostsError] = useState('');
+    const [logoutError, setLogoutError] = useState('');
 
 
     // Check whether a user is signed in
@@ -248,6 +265,37 @@ function App() {
 
     }
 
+  // Log out the current user
+async function handleLogout() {
+
+    setLogoutError('');
+
+    try {
+
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Could not log out.');
+        }
+
+        // Remove the current user from React state
+        setUser(null);
+
+    } catch (error) {
+
+        console.error('Logout error:', error);
+
+        setLogoutError(error.message || 'Could not log out.');
+
+    }
+
+}
+
     return (
 
         <BrowserRouter>
@@ -272,6 +320,8 @@ function App() {
                                 postsError={postsError}
                                 onPostCreated={handlePostCreated}
                                 onPostDeleted={handlePostDeleted}
+                                onLogout={handleLogout}
+                                logoutError={logoutError}
                             />
                         }
                     />

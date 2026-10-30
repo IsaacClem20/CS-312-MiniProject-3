@@ -1,26 +1,84 @@
 
+/* Global styles */
+
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #302929;
+    background-color: #f5f2f0;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+
+    --primary: #963650;
+    --primary-dark: #75283e;
+    --primary-light: #f7e9ed;
+
+    --background: #f5f2f0;
+    --surface: #ffffff;
+
+    --text: #302929;
+    --muted: #756b6b;
+
+    --border: #e5dcda;
+    --danger: #b43e43;
+    --danger-dark: #922f35;
+
+    --shadow: 0 8px 25px rgba(55, 35, 40, 0.08);
+}
+
+
+/* Reset browser defaults */
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    padding: 0;
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-    background-color: #cac8c8a7;
-    color: #222;
+    min-width: 320px;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #f4e8eb,
+            transparent 38%
+        ),
+        var(--background);
+
+    color: var(--text);
+    line-height: 1.6;
 }
 
+
+/* Form elements */
+
 button,
-input {
+input,
+textarea {
     font: inherit;
 }
 
+
+/* Links */
+
 a {
-    color: #8b1e3f;
+    color: var(--primary);
     text-decoration: none;
 }
 
 a:hover {
+    color: var(--primary-dark);
     text-decoration: underline;
+}
+
+
+/* Consistent focus indicators */
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(150, 54, 80, 0.35);
+    outline-offset: 3px;
 }
