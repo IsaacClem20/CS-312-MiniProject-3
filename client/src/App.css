@@ -114,3 +114,146 @@
         padding: 22px;
     }
 }
+
+
+/* Homepage user information */
+
+.user-info {
+    background-color: white;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+
+/* Blog post creation form */
+
+.post-form-container {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.post-form-container h2 {
+    margin-top: 0;
+}
+
+.post-form-container form {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.post-form-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.post-form-container input,
+.post-form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.post-form-container textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.post-form-container button {
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: #8b1e3f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.post-form-container button:hover {
+    background-color: #6e1732;
+}
+
+.post-form-container button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* Blog post list */
+
+.post-list {
+    margin-top: 30px;
+}
+
+.post-list article {
+    background-color: rgb(233, 237, 146);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+}
+
+.post-list article h3 {
+    margin-top: 0;
+}
+
+.post-author {
+    font-weight: bold;
+}
+
+.post-date {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.post-body {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+
+/* Edit and delete button layout */
+
+.post-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.post-actions button {
+    padding: 8px 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+}
+
+.post-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Mobile responsiveness */
+
+@media (max-width: 600px) {
+
+    .app-shell {
+        margin: 15px auto;
+        padding: 15px;
+    }
+
+    .post-form-container form {
+        padding: 15px;
+    }
+
+    .post-list article {
+        padding: 15px;
+    }
+
+}
